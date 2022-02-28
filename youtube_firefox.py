@@ -5,6 +5,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 import time
 import json
+import sys
 from bs4 import BeautifulSoup
 
 option = Options()
@@ -14,45 +15,52 @@ driver = webdriver.Firefox(options=option)
 driver.implicitly_wait(5)
 
 base_url = "https://www.youtube.com/"
-keyword = "draven thach dau"
+keyword = "kha banh"
 
+data_path = f"{keyword}.json"
 
-# driver.get(f"{base_url}/search?q={keyword}")
+def scroll_down(loop):
+    count = 0
+    while (count < loop):
+        height = driver.execute_script("return document.body.scrollHeight")
+        time.sleep(2)
+        driver.find_element_by_tag_name('body').send_keys(Keys.END)
+        count += 1
 
 
 def get_channel_detail():
-
     driver.get(f"{base_url}/search?q={keyword}")
     detail = []
-    time.sleep(3)
+    time.sleep(2)
+
+    scroll_down(5)
 
     all_video = driver.find_elements(By.ID, 'dismissible')
     for video in all_video:
-        title = video.find_element_by_css_selector("#title-wrapper.style-scope.ytd-video-renderer h3.title-and-badge.style-scope.ytd-video-renderer a#video-title.yt-simple-endpoint.style-scope.ytd-video-renderer yt-formatted-string.style-scope.ytd-video-renderer").text
-        # link_video = video.find_element_by_id("img").get_attribute("src")
+        title = video.find_element_by_css_selector(
+            "#title-wrapper.style-scope.ytd-video-renderer h3.title-and-badge.style-scope.ytd-video-renderer a#video-title.yt-simple-endpoint.style-scope.ytd-video-renderer yt-formatted-string.style-scope.ytd-video-renderer").text
+        url = video.find_element_by_css_selector(
+            "a#thumbnail.yt-simple-endpoint.inline-block.style-scope.ytd-thumbnail").get_attribute("href")
+        author = video.find_element_by_css_selector(
+            "div#dismissible.style-scope.ytd-video-renderer div.text-wrapper.style-scope.ytd-video-renderer div#channel-info.style-scope.ytd-video-renderer ytd-channel-name#channel-name.long-byline.style-scope.ytd-video-renderer div#container.style-scope.ytd-channel-name div#text-container.style-scope.ytd-channel-name yt-formatted-string#text.style-scope.ytd-channel-name a.yt-simple-endpoint.style-scope.yt-formatted-string").text
+        url_author = video.find_element_by_css_selector(
+            "div#dismissible.style-scope.ytd-video-renderer div.text-wrapper.style-scope.ytd-video-renderer div#channel-info.style-scope.ytd-video-renderer ytd-channel-name#channel-name.long-byline.style-scope.ytd-video-renderer div#container.style-scope.ytd-channel-name div#text-container.style-scope.ytd-channel-name yt-formatted-string#text.style-scope.ytd-channel-name a.yt-simple-endpoint.style-scope.yt-formatted-string").get_attribute(
+            "href")
 
-        # author = video.find_elements_by_css_selector(".text-wrapper style-scope ytd-video-renderer > style-scope ytd-video-renderer > ")
-        # link_author = video.find_element_by_class_name("yt-simple-endpoint style-scope yt-formatted-string").get_attribute("src")
-
-    # links = list(dict.fromkeys(map(lambda a: a.get_attribute("href"), all_channel_list)))
-
-
-    # cname = driver.find_elements_by_css_selector("#text.style-scope.ytd-channel-name")[0].text
-    # cDess = driver.find_elements_by_css_selector("#description-container > yt-formatted-string:nth-child(2)").text
-
-    obj = {
-        "title: ": title,
-        # "link_video: ": link_video,
-        # "author: ": author,
-        # "link_author: ": link_author
-    }
-    detail.append(obj)
-    print("------------------")
+        obj = {
+            "title": title,
+            "url": url,
+            "author": author,
+            "url_author": url_author
+        }
+        detail.append(obj)
 
     return detail
 
 
-
 if __name__ == "__main__":
     all_channel_details = get_channel_detail()
-    print(json.dumps(all_channel_details))
+    # json.dump(all_channel_details, open(data_path, "w", encoding='utf8'))
+    with open(data_path, "w", encoding='utf8') as file_json:
+        json.dump(all_channel_details, file_json, ensure_ascii=False)
+    print(len(all_channel_details))

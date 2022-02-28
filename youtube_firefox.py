@@ -1,36 +1,31 @@
 from selenium import webdriver
-from time import sleep
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 import time
 import json
 import sys
-from bs4 import BeautifulSoup
-
-option = Options()
-option.headless = False
-
-driver = webdriver.Firefox(options=option)
-driver.implicitly_wait(5)
-
-base_url = "https://www.youtube.com/"
-keyword = "kha banh"
-
-data_path = f"{keyword}.json"
-
-def scroll_down(loop):
-    count = 0
-    while (count < loop):
-        height = driver.execute_script("return document.body.scrollHeight")
-        time.sleep(2)
-        driver.find_element_by_tag_name('body').send_keys(Keys.END)
-        count += 1
+from time import sleep
 
 
-def get_channel_detail():
+def get_channel_detail(keyword, base_url="https://www.youtube.com/"):
+    option = Options()
+    option.headless = False
+    driver = webdriver.Firefox(options=option)
+    driver.implicitly_wait(5)
+
+    def scroll_down(loop):
+        count = 0
+        while (count < loop):
+            height = driver.execute_script("return document.body.scrollHeight")
+            time.sleep(2)
+            driver.find_element_by_tag_name('body').send_keys(Keys.END)
+            count += 1
+
     driver.get(f"{base_url}/search?q={keyword}")
+    data_path = f"{keyword}.json"
     detail = []
+
     time.sleep(2)
 
     scroll_down(5)
@@ -55,12 +50,10 @@ def get_channel_detail():
         }
         detail.append(obj)
 
+    with open(data_path, "w", encoding='utf8') as file_json:
+        json.dump(detail, file_json, ensure_ascii=False)
+
     return detail
 
-
-if __name__ == "__main__":
-    all_channel_details = get_channel_detail()
-    # json.dump(all_channel_details, open(data_path, "w", encoding='utf8'))
-    with open(data_path, "w", encoding='utf8') as file_json:
-        json.dump(all_channel_details, file_json, ensure_ascii=False)
-    print(len(all_channel_details))
+# if __name__ == "__main__":
+#     print(len(get_channel_detail(keyword="kha banh")))

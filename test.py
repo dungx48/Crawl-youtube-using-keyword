@@ -3,7 +3,7 @@ from selenium import webdriver
 import time
 
 base_url = "https://www.youtube.com/"
-keyword = "viet linh tinh vao deo ra cai gi"
+keyword = "viet linh tinh vao day"
 
 driver = webdriver.Firefox()
 driver.get(f"{base_url}/search?q={keyword}")

@@ -6,7 +6,7 @@
 ```$ pip install -r requirements.txt```
 
 # Run:
-```uvicorn api_yt:app --reload```
+```$ uvicorn api_yt:app --reload```
 
 # Service port:
 ```http://localhost:8000/docs```

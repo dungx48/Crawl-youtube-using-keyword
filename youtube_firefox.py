@@ -54,6 +54,3 @@ def get_channel_detail(keyword, base_url="https://www.youtube.com/"):
         json.dump(detail, file_json, ensure_ascii=False)
 
     return detail
-
-# if __name__ == "__main__":
-#     print(len(get_channel_detail(keyword="kha banh")))

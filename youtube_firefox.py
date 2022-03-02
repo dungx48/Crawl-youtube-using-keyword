@@ -6,6 +6,7 @@ import time
 import json
 import sys
 from time import sleep
+from pytube import YouTube
 
 
 def get_channel_detail(keyword, base_url="https://www.youtube.com/"):
@@ -25,6 +26,7 @@ def get_channel_detail(keyword, base_url="https://www.youtube.com/"):
     driver.get(f"{base_url}/search?q={keyword}")
     data_path = f"{keyword}.json"
     detail = []
+    urls = []
 
     time.sleep(2)
 
@@ -49,8 +51,12 @@ def get_channel_detail(keyword, base_url="https://www.youtube.com/"):
             "url_author": url_author
         }
         detail.append(obj)
+        urls.append(url)
 
     with open(data_path, "w", encoding='utf8') as file_json:
         json.dump(detail, file_json, ensure_ascii=False)
 
     return detail
+
+
+

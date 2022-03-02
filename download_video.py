@@ -7,16 +7,6 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 
 
-def progress(stream, chunk, bytes_remaining):
-    filesize = stream.filesize
-    current = ((filesize - bytes_remaining) / filesize)
-    percent = ('{0:.1f}').format(current * 100)
-    progress = int(50 * current)
-    status = '█' * progress + '-' * (50 - progress)
-    sys.stdout.write(' ↳ |{bar}| {percent}%\r'.format(bar=status, percent=percent))
-    sys.stdout.flush()
-
-
 def download(keyword):
     base_url = "https://www.youtube.com/"
 
@@ -27,7 +17,7 @@ def download(keyword):
     driver.implicitly_wait(5)
 
     urls = []
-
+    i = 0
     def scroll_down(loop):
         count = 0
         while (count < loop):
@@ -35,6 +25,15 @@ def download(keyword):
             time.sleep(2)
             driver.find_element_by_tag_name('body').send_keys(Keys.END)
             count += 1
+
+    def progress(stream, chunk, bytes_remaining):
+        filesize = stream.filesize
+        current = ((filesize - bytes_remaining) / filesize)
+        percent = ('{0:.1f}').format(current * 100)
+        progress = int(50 * current)
+        status = '█' * progress + '-' * (50 - progress)
+        sys.stdout.write(' ↳ |{bar}| {percent}%\r'.format(bar=status, percent=percent))
+        sys.stdout.flush()
 
     driver.get(f"{base_url}/search?q={keyword}")
     # data_path = f"{keyword}.json"
@@ -51,16 +50,14 @@ def download(keyword):
         urls.append(url)
 
     for url in urls:
-        # ptvideo = YouTube(url, on_progress_callback=progress)
-        ptvideo = YouTube(url)
+        ptvideo = YouTube(url, on_progress_callback=progress)
+        # ptvideo = YouTube(url)
         my_streams = ptvideo.streams.order_by('resolution').desc()
-
-        mp4_stream = my_streams.filter(file_extension='mp4', progressive=True, resolution='720p')
-
-        print("Video is being downloaded as '%s.mp4'" % ptvideo.title)
-        mp4_stream.first().download(f"Download/{keyword}")
-#
-#
-# link = ["https://www.youtube.com/watch?v=xypzmu5mMPY", "https://www.youtube.com/watch?v=N4a9Db9_ijc"]
-# for i in link:
-#     print('\nDownload completed')
+        try:
+            mp4_stream = my_streams.filter(file_extension='mp4', progressive=True, resolution='720p')
+            print("Video is being downloaded as '%s.mp4'" % ptvideo.title)
+            mp4_stream.first().download(f"Download/{keyword}")
+        except:
+            print("Error")
+            i += 1
+    print("Error = ", i)

@@ -1,13 +1,20 @@
-# Author:
-* Pham Viet Dung SCI17
-* Nguyen Quoc Anh SCI17
+# Scraping YouTube Data using Python and Selenium by Keyword
+![](https://img.shields.io/static/v1?label=python&message=3.6&color=blue)
 
-# Install:
+
+## Author:
+```
+* Pham Viet Dung SCI17-MTA
+* Nguyen Quoc Anh SCI17-MTA
+```
+
+
+## Install:
 ```$ pip install -r requirements.txt```
 
-# Run:
+## Run:
 ```$ uvicorn api_yt:app --reload```
 
-# Service port:
+## Service port:
 ```http://localhost:8000/docs```
 

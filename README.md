@@ -1,4 +1,4 @@
-# Scraping YouTube Data using Python and Selenium by Keyword
+# Scraping YouTube Data by Keyword using Python and Selenium
 ![](https://img.shields.io/static/v1?label=python&message=3.6&color=blue)
 
 

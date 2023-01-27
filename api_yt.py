@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Form, UploadFile, File
 from fastapi.responses import FileResponse
-from youtube_firefox import get_channel_detail
+from crawl_youtube import get_channel_detail
 from download_video import download
 app = FastAPI()
 

@@ -5,7 +5,6 @@
 # Author:
 ```
 * Pham Viet Dung SCI17-MTA
-* Nguyen Quoc Anh SCI17-MTA
 ```
 
 

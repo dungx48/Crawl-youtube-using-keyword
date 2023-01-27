@@ -3,17 +3,21 @@
 
 
 # Author:
-```
-* Pham Viet Dung SCI17-MTA
-```
+``` Pham Viet Dung SCI17-MTA ```
 
 
 # Install:
-```$ pip install -r requirements.txt```
+```
+pip install -r requirements.txt
+```
 
 # Run:
-```$ uvicorn api_yt:app --reload```
+```
+uvicorn api_yt:app --reload
+```
 
 # Service port:
-```http://localhost:8000/docs```
+```
+http://localhost:8000/docs
+```
 

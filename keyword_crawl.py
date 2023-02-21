@@ -32,8 +32,8 @@ def get_channel_detail(keyword, base_url="https://www.youtube.com/"):
 
     scroll_down(5)
 
-    all_video = driver.find_elements(By.ID, 'dismissible')
-    for video in all_video:
+    videos = driver.find_elements(By.ID, 'dismissible')
+    for video in videos:
         try:
             title = video.find_element_by_css_selector(
                     "div.text-wrapper.style-scope.ytd-video-renderer div#meta.style-scope.ytd-video-renderer h3.title-and-badge.style-scope.ytd-video-renderer").text
@@ -63,5 +63,5 @@ def get_channel_detail(keyword, base_url="https://www.youtube.com/"):
 
 
 
-# if __name__ == '__main__':
-#     get_channel_detail('soobin')
+if __name__ == '__main__':
+    get_channel_detail('soobin')
